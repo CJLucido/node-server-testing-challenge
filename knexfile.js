@@ -19,7 +19,7 @@ module.exports = {
       directory: './data/seeds'
     }
   },
-  testing: {
+  testing: {//knex migrate:latest --env testing
     client: 'sqlite3',
     connection: {
       filename: './data/tester.db3'
