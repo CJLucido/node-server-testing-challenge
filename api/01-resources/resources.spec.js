@@ -50,11 +50,11 @@ describe('resources\' endpoints', function(){
     // })
    });
 
-    //PRIMARY POST
+    //PRIMARY POST //Fail pass
     describe('resource creation', ()=>{
         it('should post a new resource with a name to tester DB',  () => {
-            return testerLib(resources)
-                    .post('/register')
+            return testerLib(server)
+                    .post('/api/resources/register')
                     .send({name: "wrench"})
                     .then(res => {
                         expect(res.body.name).toMatch('wrench')
@@ -75,15 +75,15 @@ describe('resources\' endpoints', function(){
         });
      })
 
-     //PRIMARY GET ENDPOINT
+     //PRIMARY GET ENDPOINT //Fail and pass
      describe('get /', () => {
          it('gets all using endpoint', async () => {
             await RecourseFns.insert({name: "rachet"});
             await RecourseFns.insert({name: "welder"});
             await RecourseFns.insert({name: "scanner"});
-            
-           await testerLib(resources)
-             .get('/')
+
+           await testerLib(server)
+             .get('/api/resources/')
              .then(res => {
                  expect(res.status).toBe(200)
              })
