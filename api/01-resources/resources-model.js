@@ -32,7 +32,7 @@ async function update(changes, id) {
 
 function remove(id) {
   return db('tester')
-    .where(id)
+    .where({id})
     .del();
 }
 

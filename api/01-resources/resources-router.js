@@ -25,9 +25,24 @@ router.get('/', (req, res) => {
 
 
 
-// router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
+    
+    Resources.remove(req.params.id)
+    .then(count => {
+        res.status(200).json(count)
+    })
+
+})
 
 
-// })
+router.put('/:id', (req, res) => {
+
+let changes = "whatever"
+
+    Resources.update({name: changes}, req.params.id)
+    .then(count => {
+        res.status(200).json(count)
+    })
+})
 
 module.exports = router;

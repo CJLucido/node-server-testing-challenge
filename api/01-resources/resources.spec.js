@@ -35,7 +35,7 @@ describe('resources\' endpoints', function(){
            await RecourseFns.insert({name: "rachet"});
            await RecourseFns.insert({name: "welder"});
            await RecourseFns.insert({name: "scanner"});
-           await RecourseFns.remove({id: 3});
+           await RecourseFns.remove(3);
 
            const newResources = await db('tester');
 
@@ -50,17 +50,6 @@ describe('resources\' endpoints', function(){
     // })
    });
 
-    //PRIMARY POST //Fail pass
-    describe('resource creation', ()=>{
-        it('should post a new resource with a name to tester DB',  () => {
-            return testerLib(server)
-                    .post('/api/resources/register')
-                    .send({name: "wrench"})
-                    .then(res => {
-                        expect(res.body.name).toMatch('wrench')
-                    });
-        });
-    });
 
      //PRIMARY GET MODEL //Fail and pass
      describe('gets all resources', () => {
@@ -73,7 +62,33 @@ describe('resources\' endpoints', function(){
  
             expect(newResources).toHaveLength(3)
         });
-     })
+     });
+
+
+    //PRIMARY POST ENDPOINT //Fail pass
+    describe('resource creation', ()=>{
+        it('should post a new resource with a name to tester DB',  () => {
+            return testerLib(server)
+                    .post('/api/resources/register')
+                    .send({name: "wrench"})
+                    .then(res => {
+                        expect(res.body.name).toMatch('wrench')
+                    });
+        });
+
+        it('should post a new resource to tester DB',  () => { //X'd
+            return testerLib(server)
+                    .post('/api/resources/register')
+                    .send({name: "wrench"})
+                    .then(res => {
+                        expect(res.status).toBe(201)
+                    });
+        });
+    });
+
+    
+     
+   
 
      //PRIMARY GET ENDPOINT //Fail and pass
      describe('get /', () => {
@@ -86,8 +101,77 @@ describe('resources\' endpoints', function(){
              .get('/api/resources/')
              .then(res => {
                  expect(res.status).toBe(200)
-             })
-         })
-     })
+             });
+         });
 
+
+         it('gets all using endpoint', async () => { //X'd
+            await RecourseFns.insert({name: "rachet"});
+            await RecourseFns.insert({name: "welder"});
+            await RecourseFns.insert({name: "scanner"});
+
+           await testerLib(server)
+             .get('/api/resources/')
+             .then(res => {
+                 expect(Array.isArray(res.body)).toBe(true)
+             });
+         });
+     });
+
+
+    //PRIMARY DELETE ENDPOINT //Fail and pass
+     describe('delete /:id', () => {
+            it('gets all using endpoint', async () => {
+               await RecourseFns.insert({name: "rachet"});
+               await RecourseFns.insert({name: "welder"});
+               await RecourseFns.insert({name: "scanner"});
+   
+              await testerLib(server)
+                .delete('/api/resources/1')
+                .then(res => {
+                    expect(res.body).toBe(1)
+                });
+            });
+
+            it('gets all using endpoint', async () => { //X'd
+                await RecourseFns.insert({name: "rachet"});
+                await RecourseFns.insert({name: "welder"});
+                await RecourseFns.insert({name: "scanner"});
+    
+               await testerLib(server)
+                 .delete('/api/resources/1')
+                 .then(res => {
+                     expect(res.status).toBe(200)
+                 });
+             });
+
+        });
+
+            //PRIMARY UPDATE ENDPOINT //Fail and pass
+     describe('update /:id', () => {
+        it('gets all using endpoint', async () => {
+           await RecourseFns.insert({name: "rachet"});
+           await RecourseFns.insert({name: "welder"});
+           await RecourseFns.insert({name: "scanner"});
+
+          await testerLib(server)
+            .put('/api/resources/1')
+            .then(res => {
+                expect(res.body.name).toBe("whatever")
+            });
+        });
+
+        it('gets all using endpoint', async () => { //X'd
+            await RecourseFns.insert({name: "rachet"});
+            await RecourseFns.insert({name: "welder"});
+            await RecourseFns.insert({name: "scanner"});
+
+           await testerLib(server)
+             .put('/api/resources/1')
+             .then(res => {
+                 expect(res.status).toBe(200)
+             });
+         });
+
+    });
 });
